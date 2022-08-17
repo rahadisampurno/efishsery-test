@@ -1,0 +1,12 @@
+@startuml storage-caption 
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+Person(author, "User")
+
+System(storageSystem,"Storage System")
+
+Rel(author,storageSystem,"Create Account")
+Rel(author,storageSystem,"Read Data")
+System_Ext(data_storage,"https://stein.efishery.com/v1/storages")
+Rel(storageSystem,data_storage,"Get storage information")
+@enduml

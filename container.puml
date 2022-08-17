@@ -1,0 +1,28 @@
+@startuml storage-container 
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+
+Person(author, "User")
+System_Ext(data_storage,"https://stein.efishery.com/v1/storages")
+
+System_Boundary(boundSystem,"Storage"){
+Container(StorageSystem1,"Storage System","NetSarang")
+Rel(author,StorageSystem1,"Read Data")
+Rel(author,StorageSystem1,"Create Account")
+
+Container(authApp,"Auth Apps","Authentication")
+Rel(StorageSystem1,authApp,"Create Account")
+ContainerDb(authDb,"User Database","db.json")
+Rel(authApp,authDb,"InsertData")
+Rel(authApp,authDb,"ViewData")
+
+
+Container(FectApp,"Fecth Apps","Fecth data storage")
+ContainerDb(fecthDb,"storage Database","inMemories")
+Rel(StorageSystem1,FectApp,"Read Data","token: jwt.Token")
+Rel(FectApp,fecthDb,"Insert Data","insert Data Storage")
+Rel(FectApp,fecthDb,"Read Data","Get Data Storage")
+Rel(FectApp,data_storage,"Read Data","Get Data Storage ketika app fect awal running")
+Rel(FectApp,authDb,"Read Data", "verification data paylod in jwt token")
+}
+
+@enduml

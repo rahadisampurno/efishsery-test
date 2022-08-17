@@ -1,0 +1,34 @@
+version: '2.2'
+services:
+  golang:
+    container_name: auth-go-compose-3
+    build:
+      context: .
+      # Golang
+      dockerfile: auth-app/Dockerfile
+    ports:
+      - "9001:9001"
+    environment:
+      - port=9001
+      - SECRETKEY=APAAJABOLEH
+      - DBROUTE=/database/db.json
+    volumes:
+      - database:/database/
+
+  nodejs:
+    container_name: fetch-node-compose-3
+    build: 
+      context: .
+      dockerfile: fetch-app/Dockerfile
+    volumes: 
+      - database:/database/
+    ports:
+      - "9000:9000"
+    environment:
+      - PORT=9000
+      - SECRETKEY=APAAJABOLEH
+      - DATABASE=/database/db.json
+
+volumes:
+  database:
+    external: false

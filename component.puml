@@ -1,0 +1,45 @@
+@startuml storage-component 
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/release/1-0/C4_Container.puml
+Container(StorageSystem,"Storage System","NetSarang")
+System_Ext(data_storage,"https://stein.efishery.com/v1/storages")
+
+    Container_Boundary(storageService,"Storage Service"){
+    Container(AuthResource,"Auth Apps","Golang")  
+    Rel(StorageSystem,AuthResource,"Create Account")
+
+    Container(signIn,"Post Resource","Sign-in")  
+    Rel(AuthResource,signIn,"Create Account")
+     Container(registry,"Post Resource","registry")  
+    Rel(AuthResource,registry,"Create Account")
+     Container(changePassword,"Put Resource","Sign-in")  
+    Rel(AuthResource,changePassword,"Put Role Account")
+
+    ContainerDb(AuthDb,"storage Database","fileBase")
+    Rel(signIn,AuthDb,"Read Resource")
+    Rel(registry,AuthDb,"Post Resource")
+    Rel(changePassword,AuthDb,"Put Resource")
+
+
+    Container(fectResource,"Fetch Apps","Node-js")
+    Rel(StorageSystem,fectResource,"Read Resource")
+
+    Container(Authsystem,"Verify Token Apps","Node-js")
+    Rel(fectResource,Authsystem,"Read Resource")
+    Rel(Authsystem,AuthDb,"Read Resource")
+
+    Container(insertPrice,"Post Resource","Insert-Price")  
+    Rel(Authsystem,insertPrice,"Post Resource")
+    Container(listStorage,"Read Resource","list-storage")  
+    Rel(Authsystem,listStorage,"Read Account")
+    Container(listStorageAdmin,"Read Resource","list-storage")  
+    Rel(Authsystem,listStorageAdmin,"Read Role Account")
+
+    Container(FecthDb,"storage Data","inMemories")
+    Rel(insertPrice,FecthDb,"Post Resource")
+    Rel(listStorage,FecthDb,"Read Resource")
+    Rel(listStorageAdmin,FecthDb,"Read Resource")
+    Rel(FecthDb,data_storage,"Read Resource")
+}
+
+
+@enduml
